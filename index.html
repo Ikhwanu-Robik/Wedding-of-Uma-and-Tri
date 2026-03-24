@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wedding Invitation Gallery</title>
+
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        width: 100svw;
+        height: 100svh;
+        display: flex;
+        flex-direction: column;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+      }
+
+      img {
+        width: 100%;
+        height: auto;
+        opacity: 0;
+        transform: translateY(-50px) scale(0.95);
+        transition: all 0.8s ease;
+      }
+
+      /* Active state when visible */
+      img.show {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+
+      #heart-icon {
+        position: absolute;
+        bottom: 17svh;
+        align-self: center;
+
+        width: 100px;
+        height: 100px;
+        fill: #888;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        filter: drop-shadow(0 0 6px #888) drop-shadow(0 0 12px #888);
+
+        transform-origin: center;
+        animation: heartbeat 1.2s infinite;
+      }
+
+      #heart-icon:hover {
+        fill: #330808;
+        filter: drop-shadow(0 0 6px #330808) drop-shadow(0 0 12px #330808);
+      }
+
+      @keyframes heartbeat {
+        0% {
+          transform: scale(1);
+        }
+        14% {
+          transform: scale(1.25);
+        }
+        28% {
+          transform: scale(1);
+        }
+        42% {
+          transform: scale(1.25);
+        }
+        70% {
+          transform: scale(1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .now-playing {
+        position: fixed;
+        bottom: -80px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #111;
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-size: 14px;
+        opacity: 0;
+        transition: all 0.4s ease;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      }
+
+      .now-playing.show {
+        bottom: 20px;
+        opacity: 1;
+      }
+
+      .img-non-cover {
+        display: none;
+      }
+
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <img src="Our wedding party invitation_page-0001.jpg" alt="" />
+    <img
+      src="Our wedding party invitation_page-0002.jpg"
+      alt=""
+      class="img-non-cover"
+    />
+    <img
+      src="Our wedding party invitation_page-0003.jpg"
+      alt=""
+      class="img-non-cover"
+    />
+    <img
+      src="Our wedding party invitation_page-0004.jpg"
+      alt=""
+      class="img-non-cover"
+    />
+
+    <svg
+      id="heart-icon"
+      class="w-6 h-6 text-gray-800 dark:text-white"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      fill="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="m12.75 20.66 6.184-7.098c2.677-2.884 2.559-6.506.754-8.705-.898-1.095-2.206-1.816-3.72-1.855-1.293-.034-2.652.43-3.963 1.442-1.315-1.012-2.678-1.476-3.973-1.442-1.515.04-2.825.76-3.724 1.855-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a.985.985 0 0 0 .743-.34Z"
+      />
+    </svg>
+
+    <audio
+      id="heartSound"
+      src="Elvis Presley - Can't Help Falling In Love With You Instrumental.mp3"
+      loop
+    ></audio>
+
+    <div id="nowPlaying" class="now-playing"></div>
+
+    <script>
+      const images = document.querySelectorAll("img");
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("show");
+            }
+          });
+        },
+        {
+          threshold: 0.3,
+        }
+      );
+
+      images.forEach((img) => observer.observe(img));
+
+      document.getElementById("heart-icon").addEventListener("click", () => {
+        document.getElementById("heartSound").play();
+
+        showNowPlaying("Elvis Presley - Can't Help Falling In Love With You");
+
+        setTimeout(() => {
+          let nonCoverImgs = document.querySelectorAll(".img-non-cover");
+
+          nonCoverImgs.forEach((elm) => {
+            elm.classList.remove("img-non-cover");
+          });
+
+          document.getElementById("heart-icon").classList.add("hidden");
+        }, 1000);
+      });
+
+      function showNowPlaying(title) {
+        document.getElementById("nowPlaying").innerHTML =
+          "Now Playing : <br/>" + title;
+        document.getElementById("nowPlaying").classList.add("show");
+
+        setTimeout(() => {
+          document.getElementById("nowPlaying").classList.remove("show");
+        }, 3000);
+      }
+    </script>
+  </body>
+</html>
